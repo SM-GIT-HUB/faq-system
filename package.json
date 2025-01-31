@@ -1,0 +1,36 @@
+{
+  "name": "faqsystem",
+  "version": "1.0.0",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "chai": "^5.1.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.19.0",
+    "express": "^4.21.2",
+    "google-translate-api": "^2.3.0",
+    "husky": "^9.1.7",
+    "ioredis": "^5.4.2",
+    "jsonwebtoken": "^9.0.2",
+    "mocha": "^11.1.0",
+    "mongoose": "^8.9.5",
+    "prettier": "^3.4.2",
+    "redis": "^4.7.0",
+    "sanitize-html": "^2.14.0",
+    "supertest": "^7.0.0"
+  }
+}
