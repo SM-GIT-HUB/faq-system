@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useUser } from "../store/user-store"
+import { Link } from "react-router-dom"
 
 function SignupPage() {
   const [inputState, setInputState] = useState({
@@ -20,6 +21,7 @@ function SignupPage() {
   return (
     <div className="h-screen flex items-center justify-center">
         <div className="border-[2px] border-blue-500 p-2 rounded-[4px] w-[300px] flex flex-col gap-4">
+            Signup
             <div className="flex flex-col gap-2">
                 <div className="">
                     <input type="text" name="name" id="name" placeholder="Enter your name" className={inputCls} value={inputState.name} onChange={(e) => setInputState({ ...inputState, name: e.target.value })} />
@@ -35,6 +37,12 @@ function SignupPage() {
             <button className="bg-blue-800 text-white rounded-full py-2 cursor-pointer hover:bg-blue-900" onClick={handleSignup}>
                 Submit
             </button>
+
+            <h1 className="text-center">or</h1>
+
+            <Link to={'/login'} className="text-center bg-blue-800 text-white rounded-full py-2 cursor-pointer hover:bg-blue-900">
+              Login
+            </Link>
         </div>
     </div>
   )
