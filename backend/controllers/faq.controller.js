@@ -14,8 +14,14 @@ async function getFaqs(req, res)
     try {
         const redisCache = await getTranslatedFaqs(pageNumber, lang);
 
+        const count = await faqModel.countDocuments();
+
         if (redisCache.success) {
-            return res.status(200).json({ faqs: redisCache.faqs });
+            return res.status(200).json({ faqs: redisCache.faqs, count });
+        }
+
+        if (Math.floor(count / 5) + 1 < pageNumber) {
+            pageNumber = Math.floor(count / 5) + 1;
         }
 
         let selectString = "question answer user";
@@ -32,7 +38,7 @@ async function getFaqs(req, res)
             await redis.setex(key, 3600, JSON.stringify(faqs));
         }
 
-        res.status(200).json({ faqs });
+        res.status(200).json({ faqs, count });
     }
     catch(err) {
         console.log("error in getfaqs controller:", err);
@@ -91,8 +97,6 @@ async function editFaq(req, res)
             return res.status(404).json({ success: false, message: "Faq not found" });
         }
 
-        console.log(req.user._id, faq.user);
-
         if (req.user._id.toString() != faq.user.toString()) {
             return res.status(401).json({ success: false, message: "Please ask the owner to edit this faq" });
         }
@@ -109,7 +113,7 @@ async function editFaq(req, res)
         {
             newQuestion = question;
             newQuestion_hi = await translateLang(question, "en", "hi");
-            newQuestion_hi = await translateLang(answer, "en", "bn");
+            newQuestion_bn = await translateLang(question, "en", "bn");
         }
 
         if (answer != faq.answer)
@@ -139,7 +143,7 @@ async function editFaq(req, res)
         await faq.save();
         await redisClear();
 
-        res.status(200).json({ success: true, message: "Faq edited", faq: { user: faq.user, question: faq.question, answer: faq.answer } });
+        res.status(200).json({ success: true, message: "Faq edited", faq: { _id: faq._id, user: faq.user, question: faq.question, answer: faq.answer } });
     }
     catch(err) {
         console.log("error in editfaq controller:", err.message);
@@ -163,6 +167,7 @@ async function deleteFaq(req, res)
         }
 
         await faqModel.findByIdAndDelete(id);
+        await redisClear();
 
         res.status(200).json({ success: true, message: "Faq deleted" });
     }

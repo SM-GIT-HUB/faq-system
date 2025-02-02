@@ -90,7 +90,16 @@ async function createFaqWithTranslation(req, question, answer, htmlContent, clea
 
 async function redisClear()
 {
-    return {};
+    const count = await faqModel.countDocuments();
+    const totalPages = Math.floor(count / 5) + 1;
+
+    for (let page = 1; page <= totalPages; page++)
+    {
+        const key = `faq_page_${page}_lang_`;
+        await redis.del(key + "en");
+        await redis.del(key + "bn");
+        await redis.del(key + "hi");
+    }
 }
 
 

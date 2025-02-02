@@ -50,7 +50,7 @@ async function login(req, res)
     try {
         const { username, password } = req.body;
 
-        const user = await userModel.findOne({ username }).select("username password");
+        const user = await userModel.findOne({ username }).select("_id username password name role");
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -87,5 +87,11 @@ async function logout(req, res)
     }
 }
 
+async function getUser(req, res)
+{
+    const user = req.user;
+    res.status(200).json({ user: { _id: user._id, name: user.name, username: user.username, role: user.role } });
+}
 
-export { signup, login, logout }
+
+export { signup, login, logout, getUser }
